@@ -1,7 +1,7 @@
 import { db } from '../db/connection.js';
 
 export const createUser = (req, res) => {
-    const newUser = req.body;
+    const { newUser } = req.body;
     const sql = `INSERT INTO users SET ?`
 
     db.query(sql, newUser, (err, result) => {
