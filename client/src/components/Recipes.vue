@@ -18,6 +18,33 @@
       hide-header
       card-class="grid-items"
     >
+      <template v-slot:item="props">
+        <q-card class="q-pa-md my-card">
+          <q-card-section>
+            <div class="text-h6">{{ props.row.title }}</div>
+            <div class="text-subtitle2">
+              Published: {{ props.row.published_date }}
+            </div>
+          </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Ingredients</div>
+            <div class="text-subtitle2">
+              {{ props.row.ingredients_needed }}
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="text-subtitle2">Preparation</div>
+            {{ props.row.body }}
+          </q-card-section>
+          <q-separator />
+          <q-card-actions align="center">
+            <q-btn flat label="Edit" @click="editRecipe(props.row.id)" />
+            <q-btn flat label="Delete" @click="deleteRecipe(props.row.id)" />
+          </q-card-actions>
+        </q-card>
+      </template>
+
       <template v-slot:top-right>
         <q-input
           borderless
@@ -95,6 +122,13 @@ export default {
         this.newRecipe = true;
       }
     },
+    editRecipe(id) {
+      console.log(id);
+    },
+    async deleteRecipe(id) {
+      await authenticationService.deleteRecipe(id);
+      await this.getAllRecipes();
+    },
     recipeCreated() {
       this.newRecipe = false;
       this.getAllRecipes();
@@ -107,11 +141,13 @@ export default {
 </script>
 
 <style>
-.grid-items {
-  height: 350px;
+.my-card {
+  height: 400px;
   margin: 20px 40px;
   overflow: hidden;
   overflow: auto;
+  width: 20%;
+  min-width: 300px;
 }
 
 .q-table__grid-item-title {

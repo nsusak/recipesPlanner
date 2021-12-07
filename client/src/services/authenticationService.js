@@ -9,5 +9,8 @@ export default {
   },
   createNewRecipe(newRecipe) {
     return api().post('recipes', newRecipe)
+  },
+  deleteRecipe(recipeId) {
+    return api().delete(`recipes/${recipeId}`)
   }
 };
