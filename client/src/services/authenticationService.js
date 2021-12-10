@@ -12,5 +12,14 @@ export default {
   },
   deleteRecipe(recipeId) {
     return api().delete(`recipes/${recipeId}`)
+  },
+  getAllIngredients() {
+    return api().get('ingredients');
+  },
+  createIngredient(newIngredient) {
+    return api().post('ingredients', newIngredient);
+  },
+  getAllUnits() {
+    return api().get('units');
   }
 };

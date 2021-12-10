@@ -22,6 +22,20 @@
         <q-card class="q-pa-md my-card">
           <q-card-section>
             <div class="text-h6">{{ props.row.title }}</div>
+            <q-popup-edit
+              v-model="props.row.title"
+              title="Edit the Title"
+              auto-save
+              v-slot="scope"
+            >
+              <q-input
+                v-model="scope.value"
+                dense
+                autofocus
+                counter
+                @keyup.enter="editRecipe"
+              />
+            </q-popup-edit>
             <div class="text-subtitle2">
               Published: {{ props.row.published_date }}
             </div>
@@ -37,9 +51,20 @@
             <div class="text-subtitle2">Preparation</div>
             {{ props.row.body }}
           </q-card-section>
+
+          <q-popup-edit buttons v-model="props.row.body" v-slot="scope">
+            <q-input
+              type="textarea"
+              v-model="scope.value"
+              autofocus
+              counter
+              @keyup.enter.stop
+            />
+          </q-popup-edit>
+
           <q-separator />
           <q-card-actions align="center">
-            <q-btn flat label="Edit" @click="editRecipe(props.row.id)" />
+            <q-btn flat label="Edit" @click="editRecipe(props.row)" />
             <q-btn flat label="Delete" @click="deleteRecipe(props.row.id)" />
           </q-card-actions>
         </q-card>
@@ -118,12 +143,11 @@ export default {
       //   console.log(this.recipes);
     },
     createRecipe() {
-      if (confirm("Do you want to create a new recipe?")) {
-        this.newRecipe = true;
-      }
+      this.newRecipe = true;
     },
     editRecipe(id) {
       console.log(id);
+      console.log(this.rows[this.rows.id]);
     },
     async deleteRecipe(id) {
       await authenticationService.deleteRecipe(id);
