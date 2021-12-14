@@ -13,7 +13,9 @@
 
         <q-toolbar-title> Recipes App </q-toolbar-title>
 
-        <div>Version {{ $q.version }}</div>
+        <div class="cursor-pointer" @click="register">
+          Register {{ $q.version }}
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -96,6 +98,11 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
     };
+  },
+  methods: {
+    register() {
+      this.$router.push({ name: "register" });
+    },
   },
 });
 </script>

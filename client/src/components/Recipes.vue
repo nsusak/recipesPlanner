@@ -11,7 +11,7 @@
       :rows-per-page-options="[8, 12, 16]"
       grid
       title="All Recipes"
-      :rows="rows"
+      :rows="recipes"
       :columns="columns"
       row-key="name"
       :filter="filter"
@@ -104,7 +104,7 @@ export default {
   },
   data() {
     return {
-      recipes: [],
+      // recipes: [],
       rows: [],
       columns: [
         {
@@ -135,23 +135,21 @@ export default {
     };
   },
   methods: {
-    async getAllRecipes() {
-      const response = await authenticationService.getAllRecipes();
-      const recipesIn = response.data;
-      this.rows = recipesIn;
-      //   this.recipes = response.data;
-      //   console.log(this.recipes);
-    },
     createRecipe() {
       this.newRecipe = true;
     },
     editRecipe(id) {
       console.log(id);
-      console.log(this.rows[this.rows.id]);
+      for (const row of this.rows) {
+        if (id.id === row.id) {
+          console.log(row);
+        }
+      }
     },
     async deleteRecipe(id) {
-      await authenticationService.deleteRecipe(id);
-      await this.getAllRecipes();
+      await this.$store.dispatch("recipes/deleteRecipe", id);
+      // await authenticationService.deleteRecipe(id);
+      // await this.getAllRecipes();
     },
     recipeCreated() {
       this.newRecipe = false;
@@ -159,7 +157,13 @@ export default {
     },
   },
   async created() {
-    await this.getAllRecipes();
+    // await this.getAllRecipes();
+    await this.$store.dispatch("recipes/setAllRecipes");
+  },
+  computed: {
+    recipes() {
+      return this.$store.getters["recipes/getAllRecipes"];
+    },
   },
 };
 </script>
@@ -174,7 +178,7 @@ export default {
   min-width: 300px;
 }
 
-.q-table__grid-item-title {
+.text-h6 {
   color: teal;
 }
 </style>
